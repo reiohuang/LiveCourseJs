@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>todo-list</title>
+  <!-- Bootstrap css -->
+  <link rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+    integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+    crossorigin="anonymous">
+  <style>
+    input:checked+p {
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app" class="container my-3">
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">待辦事項</span>
+      </div>
+      <input type="text" class="form-control" placeholder="準備要做的任務" id="input">
+      <div class="input-group-append">
+        <button class="btn btn-primary" type="button" id="submit">新增</button>
+      </div>
+    </div>
+    <div class="card text-center">
+      <ul class="list-group list-group-flush text-left" id="todoList">
+      </ul>
+      <div class="card-footer d-flex justify-content-between">
+        <span>還有 <span id="taskCount">0</span> 筆任務</span>
+        <a href="#" id="clearTask">清除所有任務</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+    // 本作業有參考範例程式碼
+
+    var input = document.getElementById('input');
+    var submit = document.getElementById('submit');
+    var clearTask = document.getElementById('clearTask');
+    var todoList = document.getElementById('todoList');
+    var taskCount = document.getElementById('taskCount');
+
+    //點擊事件監聽
+    submit.addEventListener('click', addTodo);
+    clearTask.addEventListener('click', removeAll);
+    todoList.addEventListener('click', doSomething);
+    input.addEventListener('keypress', enterKey);
+
+
+    //關注點分離，資料和畫面分開管理
+    var data = [];  //存放資料的空物件
+    renderPage(data);
+
+
+    //新增資料
+    function addTodo() {
+      var newTodo = input.value.trim(); //trim：讓前後空白消失
+      var timeStamp = Math.floor(Date.now()); //用日期產生隨機整數id
+      if (newTodo !== '') {    //不為空則放入資料
+        data.push({
+          id: timeStamp,    //會得到像這樣的id 1593725950221
+          title: newTodo,   //去除空白後的input內容
+          completed: false, //是否完成了，預設false
+        });
+        renderPage(data);  //重新渲染畫面
+        input.value = ''; //資料送出後把輸入欄內的資料清掉
+      }
+    }
+
+    //刪除資料
+    function removeTodo(id) { //傳進來的id是timeStamp那串id 
+      var newIndex = 0;
+      data.forEach((item, key) => { //將陣列資料forEach出來
+        if (id == item.id) { //若傳進來的id等於item.id的話，就讓newIndex等於data的索引值
+          newIndex = key;
+        }
+      })
+      data.splice(newIndex, 1); //刪除陣列索引值位子資料1筆
+      renderPage(data);
+    }
+
+    //刪除全部資料
+    function removeAll(e) {
+      e.preventDefault(); //避免網址跳轉，取消a連結預設回到頁面最上方功能
+      data = [];  //清空資料
+      renderPage(data);
+    }
+
+    //完成待辦事項
+    function completeTodo(id) {
+      data.forEach((item) => {
+        if (id == item.id) {  //如果傳進來id等於item.id，就把item.completed修改成false-三元運算
+          item.completed = item.completed ? false : true;
+        }
+      })
+      renderPage(data);
+    }
+
+    //按 Enter 新增資料
+    function enterKey(e) {
+      console.log(e.keyCode);
+      if (e.keyCode == 13) {  //對應 ASCII Enter keycode
+        addTodo();
+      }
+    }
+
+
+    //把資料呈現到畫面上
+    function render() {
+      var string = '';
+      data.forEach(function (item, key) {
+        string += `<li class="d-flex justify-content-between mx-2 p-2">
+        <div class="d-flex align-items-center">
+          <input type="checkbox">
+          <p class="ml-2 mb-0">${item.text}</p>
+        </div>
+        <button class="btn btn-outline-primary btns" data-id="${key}"><span>移除</span></button>
+        </li>`
+      });
+      todoList.innerHTML = string;
+      var btns = document.querySelectorAll('.btns');
+      btns.forEach(function (btn) {
+        btn.addEventListener('click', removeTodo);
+      });
+      taskCount.textContent = data.length;
+    }
+
+  </script>
+</body>
+
+</html>
