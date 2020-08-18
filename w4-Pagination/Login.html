@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+    integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+    crossorigin="anonymous">
+
+  <style>
+    html,
+    body {
+      height: 100%;
+      text-align: center;
+    }
+  
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  
+    .form-signin {
+      width: 100%;
+      max-width: 330px;
+      padding: 15px;
+      margin: auto;
+    }
+  </style>
+</head>
+
+<body>
+  
+</body>
+</html>
+
+
+
+
+// 儲存 cookie。expires 設置有效時間(到期日)，UNIX 格式轉成 JS 儲存的格式
+document.cookie = `token=${token};expires=${new Date(expired * 1000)}; path=/`;
