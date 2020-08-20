@@ -24,7 +24,7 @@ new Vue({
       fileUploading: false,
     },
     user: {
-      token: 'gDpKhUe4zJjamkPm9FM37rtwUMZly5fTEukqHgZocY1V7rMwjvBZvQXKgOr0',
+      token: '', // token 存哪裡都可以
       uuid: 'c764053a-9bb3-4f83-a21e-7be061c39c38',
     },
   },
@@ -48,7 +48,16 @@ new Vue({
      * 取得全部產品
      * @param page 頁碼，預設直式第一頁
      */
-    getProducts(page = 1) { },
+    getProducts(page = 1) {
+      const api = `https://course-ec-api.hexschool.io/api/${this.user.uuid}/admin/ec/products?page=${page}`;
+      // 預設帶入 token，作為預設值做發送，之後每次發送時皆會把這個 token 帶上。
+      axios.defaults.headers.common.Authorization = `Bearer ${this.user.token}`;
+
+      axios.get(api).then((response) => {
+        this.products = response.data.data; // 取得產品列表(對應遠端取回的資料)
+        this.pagination = response.data.meta.pagination; // 取得分頁資訊
+      });
+    },
     /**
      * 開啟 Modal 視窗
      * @param isNew 判斷目前是否為新增(true)或是編輯(false)
@@ -79,7 +88,7 @@ new Vue({
     delProduct() {
       const url = `https://course-ec-api.hexschool.io/api/${this.user.uuid}/admin/ec/product/${this.tempProduct.id}`;
 
-      // 預設帶入 token
+      // 預設帶入 token，作為預設值做發送，之後每次發送時皆會把這個 token 帶上。
       axios.defaults.headers.common.Authorization = `Bearer ${this.user.token}`;
 
       axios.delete(url).then(() => {
