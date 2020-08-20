@@ -93,11 +93,12 @@
           const api = `https://course-ec-api.hexschool.io/api/auth/login`;
           axios.post(api, this.user).then((response) => {
             const token = response.data.token;
-            const expired = response.data.expired;
+            const expired = response.data.expired; //到期日
             // 寫入 cookie token
             // 儲存 cookie。expires 設置有效時間(到期日)，UNIX 格式轉成一般時間格式。
             document.cookie = `token=${token};expires=${new Date(expired * 1000)}; path=/`;
-            // 轉址到 Products 頁面
+            // 1. 驗證成功並轉址到 Products 頁面
+            // 2. 因 ajax 為非同步行為會最後執行，所以不能把此段寫在 axios 外面
             window.location = 'Products.html';
           }).catch((error) => {
             console.log(error);

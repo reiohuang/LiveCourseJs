@@ -76,9 +76,13 @@
     * pagination 資料寫在 all.js 的 data: {} 中
     * @emit-pages="getProducts"
     * 前內 emit(@emit-pages)推，後外 methods(getProducts) 接收。 -->
-    <pagination :pages="pagination" @emit-pages="getProducts"></pagination>
+    <pagination
+      :pages="pagination" 
+      @emit-pages="getProducts"> <!-- 觸發更新事件 -->
+    </pagination>
 
     <!-- Modal -->
+    <!-- 產品資訊 -->
     <div id="productModal" class="modal fade" tabindex="-1" role="dialog"
       aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-xl" role="document">

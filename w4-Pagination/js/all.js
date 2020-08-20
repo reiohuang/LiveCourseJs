@@ -1,3 +1,17 @@
+// 先把與資料結構有關的挑出來做
+
+// -製作登入
+// -列出產品,顯示產品列表
+//   -驗證
+// -分頁功能（Ajax，如何閱讀 Ajax結果）
+//   -取得分頁
+//   -了解分頁結構
+// -新增／編輯產品
+//   -產生元件
+//   -取得遠端資料
+//   -更新（emit)
+// -刪除 
+
 /**
  * Vue 說明
  * 不加上 const app，這邊不加上 const app = new Vue 並沒有任何影響。
@@ -25,7 +39,7 @@ new Vue({
     },
     user: {
       token: '', // token 存哪裡都可以
-      uuid: '',
+      uuid: 'c764053a-9bb3-4f83-a21e-7be061c39c38',
     },
   },
   /**
@@ -65,8 +79,9 @@ new Vue({
      */
     openModal(isNew, item) {
       switch (isNew) {
+        // 新增產品
         case 'new':
-          // 新增之前必須先清除原有可能暫存的資料
+          // 新增之前必須先清除原有可能暫存的資料，以免編輯的資料留存
           this.tempProduct = {
             imageUrl: [],
           };
@@ -75,14 +90,16 @@ new Vue({
           // 切換完畢並清空資料後開啟 Modal
           $('#productModal').modal('show');
           break;
+        // 修改產品
         case 'edit':
           // 由於描述欄位是必須透過取得單一產品的方式，因此會執行 AJAX
           this.getProduct(item.id);
           // 切換狀態為 false 代表編輯
           this.isNew = false;
           break;
+        // 刪除產品
         case 'delete':
-          // 由於目前範本僅有一層物件，因此使用淺拷貝
+          // 由於目前範本僅有一層物件，因此使用淺拷貝。將點擊的產品複製一份出來加入物件
           this.tempProduct = Object.assign({}, item);
           // 拷貝完畢後開啟 Modal
           $('#delProductModal').modal('show');

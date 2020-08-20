@@ -44,7 +44,7 @@ Vue.component('pagination', {
   </ul>
 </nav>`,
   /**
-   * 元件本身的 data，這邊不會使用
+   * 定義內層的資料結構，元件本身的 data，這邊不會使用
    */
   data() {
     return {
