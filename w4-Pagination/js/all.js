@@ -3,7 +3,7 @@
  * 不加上 const app，這邊不加上 const app = new Vue 並沒有任何影響。
  */
 new Vue({
-  el: 'app', // Vue 綁定在 app。
+  el: '#app', // Vue 綁定在 app。
   /**
    * Vue data 說明
    * @param products 放置 AJAX 回來的產品資料
@@ -25,7 +25,7 @@ new Vue({
     },
     user: {
       token: '', // token 存哪裡都可以
-      uuid: 'c764053a-9bb3-4f83-a21e-7be061c39c38',
+      uuid: '',
     },
   },
   /**
@@ -168,7 +168,7 @@ new Vue({
       axios.defaults.headers.common.Authorization = `Bearer ${this.user.token}`;
 
       axios.delete(url).then(() => {
-        $('delProductModal').modal('hide'); // 刪除成功後關閉 Modal
+        $('#delProductModal').modal('hide'); // 刪除成功後關閉 Modal
         this.getProducts(); // 重新取得全部資料
       });
     },
