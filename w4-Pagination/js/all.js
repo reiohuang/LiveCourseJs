@@ -27,12 +27,14 @@ new Vue({
    * @param status 用於切換上傳圖片時的大小 icon，主要是增加使用者體驗。
    * @param user 底下分別有 token 的放置處，但主要必須注意 uuid 需改成自己的。
    */
+  // 定義資料項目與型別，data包含已存在資料以及暫存資料區
   data: {
     products: [],
     pagination: {},
+    // 暫存/新增區: 避免直接動到儲存data，拷貝一份暫存防止被更改
     tempProduct: {
       imageUrl: [],
-    },
+    }, // products 用陣列中括號可存「多筆」資料，tempProduct 用大括號最多只會有「一筆」暫存資料
     isNew: false,
     status: {
       fileUploading: false,
@@ -62,18 +64,19 @@ new Vue({
      * 取得全部產品
      * @param page 頁碼，預設值是第一頁
      */
+    // 取得第一頁產品資料
     getProducts(page = 1) {
       const api = `https://course-ec-api.hexschool.io/api/${this.user.uuid}/admin/ec/products?page=${page}`;
-      // 預設帶入 token，作為預設值做發送，之後每次發送時皆會把這個 token 帶上。
+      // 預設帶入 token，作為預設值做發送，之後每個 method 發送時皆會把這個 token 帶上。
       axios.defaults.headers.common.Authorization = `Bearer ${this.user.token}`;
 
       axios.get(api).then((response) => {
         this.products = response.data.data; // 取得產品列表(對應遠端取回的資料)
-        this.pagination = response.data.meta.pagination; // 取得分頁資訊
+        this.pagination = response.data.meta.pagination; // 取得分頁資訊，把pagination資料取出做分頁參數用
       });
     },
     /**
-     * 開啟 Modal 視窗
+     * 開啟 Modal 視窗，有三種打開視窗的情境：新增鈕、修改鈕、刪除鈕
      * @param isNew 判斷目前是否為新增(true)或是編輯(false)
      * @param item 物件，主要用於傳入要編輯或是刪除的產品資料
      */
@@ -125,7 +128,7 @@ new Vue({
       });
     },
     /**
-     * 上傳產品資料
+     * 上傳產品資料，綁定在‘確認’按鈕
      * 透過 this.isNew 的狀態將會切換新增產品或編輯產品
      * 附註新增為 「post」，編輯則是「patch」，patch 必須傳入產品 ID
      */

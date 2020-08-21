@@ -51,7 +51,7 @@ Vue.component('pagination', {
     };
   },
   /**
-   * props 說明
+   * props 說明，將外部資料傳入
    * 主要接受由外(Products)向內(pagination)傳遞的分頁物件，意指在 getProducts 取得的分頁物件
    */
   props: {
