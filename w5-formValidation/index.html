@@ -6,21 +6,75 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>表單驗證</title>
   <!-- BS4 CSS -->
-  <link rel="stylesheet"
-    href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-    crossorigin="anonymous">
-  <!-- Vue Loading Overlay Component -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/vue-loading-overlay@3/dist/vue-loading.css"
-    rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 
 <body>
-  <div class="container">
-    <div class="row justify-content-center mt-5">
-      <div id="app">
-
+  <div id="app" class="container mt-5">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-6">
+        <!-- validation-observer 驗證整體表單 -->
+        <validation-observer v-slot="{ invalid }">
+          <!-- 表單送出改為使用 form submit 的方法 -->
+          <form @submit.prevent="submitForm">
+            <!-- 姓名 -->
+            <div class="form-group">
+            <!-- rules: 規則 v-slot: 回饋 -->
+            <validation-provider rules="required" v-slot="{ errors, classes }">
+              <label for="name">姓名</label>
+              <input id="name" type="text" name="姓名" class="form-control" :class="classes" placeholder="請填寫姓名" v-model="form.name">
+              <span class="invalid-feedback">{{ errors[0] }}</span>
+            </validation-provider>
+            </div>
+            <!-- Email -->
+            <div class="form-group">
+            <validation-provider rules="required|email" v-slot="{ errors, classes }">
+              <label for="email">信箱</label>
+              <input id="email" type="email" name="信箱" class="form-control" :class="classes" placeholder="example@example.com" v-model="form.email">
+              <span class="invalid-feedback">{{ errors[0] }}</span>
+            </validation-provider>
+            </div>
+            <!-- 電話 -->
+            <div class="form-group">
+            <validation-provider rules="required|min:10|numeric" v-slot="{ errors, classes }">
+              <label for="tel">電話</label>
+              <input id="tel" type="tel" name="電話" class="form-control" :class="classes" placeholder="0912-345-678" v-model="form.tel">
+              <span class="invalid-feedback">{{ errors[0] }}</span>
+            </validation-provider>
+            </div>
+            <!-- 地址 -->
+            <div class="form-group">
+            <validation-provider rules="required" class="form-group" v-slot="{ errors, classes }">
+              <label for="address">地址</label>
+              <input id="address" type="text" name="地址" class="form-control" :class="classes" v-model="form.address">
+              <span class="invalid-feedback">{{ errors[0] }}</span>
+            </validation-provider>
+            </div>
+            <!-- 付款方式 -->
+            <div class="form-group">
+              <label for="payment">付款方式</label>
+              <select id="payment" name="付款方式" class="form-control" :class="classes" v-model="form.payment">
+                <option value="" disabled>請選擇付款方式</option>
+                <option value="WebATM">WebATM</option>
+                <option value="ATM">ATM</option>
+                <option value="CVS">CVS</option>
+                <option value="Barcode">Barcode</option>
+                <option value="Credit">Credit</option>
+                <option value="ApplePay">ApplePay</option>
+                <option value="GooglePay">GooglePay</option>
+              </select>
+            </div>
+            <!-- 留言 -->
+            <div class="form-group">
+              <label for="message">留言</label>
+              <textarea id="message" name="message" cols="30" rows="3" class="form-control" v-model="form.message">
+              </textarea>
+            </div>
+            <!-- 送出表單使用 submit 的方法，如果驗證未通過則 disabled 該按鈕 -->
+            <button type="submit" class="btn btn-primary btn-block btn-lg" :disabled="invalid">送出表單</button>
+          </form>
+        </validation-observer>
       </div>
     </div>
   </div>
@@ -30,11 +84,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
   <!-- Vue -->
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-  <!-- vee-validate full 的版本（包含規則） -->
+  <!-- 表單套件，表單套件vee-validate full 的版本（包含規則） -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vee-validate/3.3.0/vee-validate.full.min.js"></script>
-  <!-- Vue Loading Overlay Component -->
-  <script src="https://cdn.jsdelivr.net/npm/vue-loading-overlay@3"></script>
-  <!-- 為了載入中文語系套件，必須使用type="module" -->
+  <!-- 必須使用 type="module" 才能夠使用 import -->
   <script src="all.js" type="module"></script>
 </body>
+
 </html>
